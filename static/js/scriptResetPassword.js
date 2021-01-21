@@ -28,10 +28,10 @@ $(document).ready(function() {
     // $("#userInput").prop('disabled', true);
 
     //global variables
-    action_name = "ok wings";
+    action_name = "/random_session_menu";
     var d = new Date();
     var n = String(d.getTime());
-    user_id = "freddy.yonata@wingscorp.com";
+    user_id = n;
     url_link="https://apichat.wingscorp.com"
     //url_link="localhost"
     //if you want the bot to start the conversation
