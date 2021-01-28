@@ -1,4 +1,3 @@
-//Bot pop-up intro
 document.addEventListener('DOMContentLoaded', function() {
     var elemsTap = document.querySelector('.tap-target');
     var instancesTap = M.TapTarget.init(elemsTap, {});
@@ -6,9 +5,6 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(function() { instancesTap.close(); }, 4000);
 
 });
-
-
-//initialization
 $(document).ready(function() {
 
 
@@ -31,16 +27,25 @@ $(document).ready(function() {
     action_name = "ok wings";
     var d = new Date();
     var n = String(d.getTime());
-    user_id = "freddy.yonata@wingscorp.com";
+    user_id = "william.limas@wingscorp.com";
+    
+    //user_id = "william.limas@wingscorp.com"
     url_link="https://apichat.wingscorp.com"
     //url_link="localhost"
     //if you want the bot to start the conversation
     //action_trigger();
-    //restartConversation()
-    send("/restart")
-    send(action_name)
-
+    restartConversation()
+    //send("/restart")
+    
 })
+
+function sleep (time) {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
+
+// Usage!
+
+
 
 // ========================== restart conversation ========================
 function restartConversation() {
@@ -55,6 +60,10 @@ function restartConversation() {
     $(".chats").html("");
     $(".usrInput").val("");
     send("/restart");
+    sleep(2000).then(() => {
+        send("ok wings")
+    // Do something after the sleep!
+    });
 }
 
 // ========================== let the bot start the conversation ========================
@@ -160,40 +169,44 @@ function scrollToBottomOfResults() {
 //============== send the user message to rasa server =============================================
 function send(message) {
     //url_nya = url_link+":5005/webhooks/rest/webhook"
-    $.ajax({
-        url: "http://localhost:5005/webhooks/rest/webhook",
-        type: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({ message: message, sender: user_id }),
-        success: function(botResponse, status) {
-            console.log("Response from Rasa: ", botResponse, "\nStatus: ", status);
+    sleep(2000).then(() => {
+        $.ajax({
+            url: "http://localhost:5005/webhooks/rest/webhook",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ message: message, sender: user_id }),
+            success: function(botResponse, status) {
+                console.log("Response from Rasa: ", botResponse, "\nStatus: ", status);
 
-            // if user wants to restart the chat and clear the existing chat contents
-            if (message.toLowerCase() == '/restart') {
-                $("#userInput").prop('disabled', false);
+                // if user wants to restart the chat and clear the existing chat contents
+                if (message.toLowerCase() == '/restart') {
+                    $("#userInput").prop('disabled', false);
 
-                //if you want the bot to start the conversation after restart
-                // action_trigger();
-                return;
+                    //if you want the bot to start the conversation after restart
+                    // action_trigger();
+                    return;
+                }
+                setBotResponse(botResponse);
+
+            },
+            error: function(xhr, textStatus, errorThrown) {
+
+                if (message.toLowerCase() == '/restart') {
+                    // $("#userInput").prop('disabled', false);
+
+                    //if you want the bot to start the conversation after the restart action.
+                    // action_trigger();
+                    // return;
+                }
+
+                // if there is no response from rasa server
+                setBotResponse("");
+                console.log("Error from bot end: ", textStatus);
             }
-            setBotResponse(botResponse);
-
-        },
-        error: function(xhr, textStatus, errorThrown) {
-
-            if (message.toLowerCase() == '/restart') {
-                // $("#userInput").prop('disabled', false);
-
-                //if you want the bot to start the conversation after the restart action.
-                // action_trigger();
-                // return;
-            }
-
-            // if there is no response from rasa server
-            setBotResponse("");
-            console.log("Error from bot end: ", textStatus);
-        }
+        });
+    // Do something after the sleep!
     });
+    
 }
 
 //=================== set bot response in the chats ===========================================
@@ -204,7 +217,7 @@ function setBotResponse(response) {
         hideBotTyping();
         if (response.length < 1) {
             //if there is no response from Rasa, send  fallback message to the user
-            var fallbackMsg = "I am facing some issues, please try again later!!!";
+            var fallbackMsg = "Server mengalami kendala, tolong restart halaman";
 
             var BotResponse = '<img class="botAvatar" src="./static/img/sara_avatar.png"/><p class="botMsg">' + fallbackMsg + '</p><div class="clearfix"></div>';
 
@@ -217,7 +230,7 @@ function setBotResponse(response) {
 
                 //check if the response contains "text"
                 if (response[i].hasOwnProperty("text")) {
-                    var BotResponse = '<img class="botAvatar" src="./static/img/sara_avatar.png"/><p class="botMsg">' + response[i].text + '</p><div class="clearfix"></div>';
+                    var BotResponse = '<img class="botAvatar" src="./static/img/sara_avatar.png"/><p class="botMsg"><span style="white-space: pre-line">' + response[i].text + '</span></p><div class="clearfix"></div>';
                     $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
                 }
 
@@ -315,7 +328,7 @@ function setBotResponse(response) {
             }
             scrollToBottomOfResults();
         }
-    }, 500);
+    }, 1500);
 }
 
 //====================================== Toggle chatbot =======================================
@@ -412,6 +425,7 @@ $("#clear").click(function() {
         $(".chats").html("");
         $(".chats").fadeIn();
     });
+    restartConversation()
 });
 
 //close function to close the widget.
