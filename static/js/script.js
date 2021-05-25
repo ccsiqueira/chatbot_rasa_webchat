@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
-    var elemsTap = document.querySelector('.tap-target');
-    var instancesTap = M.TapTarget.init(elemsTap, {});
-    instancesTap.open();
-    setTimeout(function() { instancesTap.close(); }, 4000);
+    //var elemsTap = document.querySelector('.tap-target');
+   // var instancesTap = M.TapTarget.init(elemsTap, {});
+    //instancesTap.open();
+    //setTimeout(function() { instancesTap.close(); }, 4000);
 
 });
 $(document).ready(function() {
@@ -18,7 +18,6 @@ $(document).ready(function() {
     $('.modal').modal();
 
 
-
     //enable this if u have configured the bot to start the conversation. 
     // showBotTyping();
     // $("#userInput").prop('disabled', true);
@@ -27,11 +26,11 @@ $(document).ready(function() {
     action_name = "ok wings";
     var d = new Date();
     var n = String(d.getTime());
-    user_id = "william.limas@wingscorp.com";
+    user_id = "freddy.yonata@wingscorp.com";
     
     //user_id = "william.limas@wingscorp.com"
     url_link="https://apichat.wingscorp.com"
-    //url_link="localhost"
+    //url_link="http://localhost"
     //if you want the bot to start the conversation
     //action_trigger();
     restartConversation()
@@ -68,10 +67,10 @@ function restartConversation() {
 
 // ========================== let the bot start the conversation ========================
 function action_trigger() {
-    //url_nya = url_link+":5005/conversations/${user_id}/execute"
+    url_nya = url_link+":5005/conversations/${user_id}/execute"
     // send an event to the bot, so that bot can start the conversation by greeting the user
     $.ajax({
-        url: "http://localhost:5005/conversations/${user_id}/execute",
+        url: url_nya,
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify({ "name": action_name }),
@@ -152,7 +151,6 @@ $("#sendButton").on("click", function(e) {
 function setUserResponse(message) {
     var UserResponse = '<img class="userAvatar" src=' + "./static/img/userAvatar.jpg" + '><p class="userMsg">' + message + ' </p><div class="clearfix"></div>';
     $(UserResponse).appendTo(".chats").show("slow");
-
     $(".usrInput").val("");
     scrollToBottomOfResults();
     showBotTyping();
@@ -168,10 +166,10 @@ function scrollToBottomOfResults() {
 
 //============== send the user message to rasa server =============================================
 function send(message) {
-    //url_nya = url_link+":5005/webhooks/rest/webhook"
+    url_nya = url_link+":5005/webhooks/rest/webhook"
     sleep(2000).then(() => {
         $.ajax({
-            url: "http://localhost:5005/webhooks/rest/webhook",
+            url: url_nya,
             type: "POST",
             contentType: "application/json",
             data: JSON.stringify({ message: message, sender: user_id }),
@@ -206,12 +204,10 @@ function send(message) {
         });
     // Do something after the sleep!
     });
-    
 }
 
 //=================== set bot response in the chats ===========================================
 function setBotResponse(response) {
-
     //display bot response after 500 milliseconds
     setTimeout(function() {
         hideBotTyping();

@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
-    var elemsTap = document.querySelector('.tap-target');
-    var instancesTap = M.TapTarget.init(elemsTap, {});
-    instancesTap.open();
-    setTimeout(function() { instancesTap.close(); }, 4000);
+    //var elemsTap = document.querySelector('.tap-target');
+    //var instancesTap = M.TapTarget.init(elemsTap, {});
+    //instancesTap.open();
+    //setTimeout(function() { instancesTap.close(); }, 4000);
 
 });
 $(document).ready(function() {
@@ -24,13 +24,13 @@ $(document).ready(function() {
     // $("#userInput").prop('disabled', true);
 
     //global variables
-    action_name = "/random_session_menu";
+    action_name = "ok wings";
     var d = new Date();
     var n = String(d.getTime());
     user_id = n;
 
     url_link="https://apichat.wingscorp.com"
-    //url_link="localhost"
+    //url_link="127.0.0.1"
     //if you want the bot to start the conversation
     //action_trigger();
     restartConversation()
@@ -60,17 +60,17 @@ function restartConversation() {
     $(".usrInput").val("");
     send("/restart");
     sleep(2000).then(() => {
-        send("/random_session_menu")
+        send("ok wings")
     // Do something after the sleep!
     });
 }
 
 // ========================== let the bot start the conversation ========================
 function action_trigger() {
-    //url_nya = url_link+":5005/conversations/${user_id}/execute"
+    url_nya = url_link+":5005/conversations/${user_id}/execute"
     // send an event to the bot, so that bot can start the conversation by greeting the user
     $.ajax({
-        url: "http://localhost:5005/conversations/${user_id}/execute",
+        url: url_nya,
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify({ "name": action_name }),
@@ -167,10 +167,10 @@ function scrollToBottomOfResults() {
 
 //============== send the user message to rasa server =============================================
 function send(message) {
-    //url_nya = url_link+":5005/webhooks/rest/webhook"
+    url_nya = url_link+":5005/webhooks/rest/webhook"
     sleep(2000).then(() => {
         $.ajax({
-            url: "http://localhost:5005/webhooks/rest/webhook",
+            url: url_nya,
             type: "POST",
             contentType: "application/json",
             data: JSON.stringify({ message: message, sender: user_id }),
