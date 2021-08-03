@@ -69,10 +69,16 @@ function handleDrop(e) {
 
 
 function handleFiles(files) {
+    images = "image uploaded|"
 	for (var i = 0, len = files.length; i < len; i++) {
-		if (validateImage(files[i]))
+		if (validateImage(files[i])){
 			previewAnduploadImage(files[i]);
+            images +=files[i].name+","
+            
+        }      
 	}
+    
+    $(".chatbot.usrInput").val(images);
 }
 
 function validateImage(image) {
@@ -105,10 +111,9 @@ function previewAnduploadImage(image) {
 	imgView.appendChild(img);
 
 	// progress overlay
-	var overlay = document.createElement("div");
-	overlay.className = "overlay";
-	imgView.appendChild(overlay);
-
+	//var overlay = document.createElement("div");
+	//overlay.className = "overlay";
+	//imgView.appendChild(overlay);
 
 	// read the image...
 	var reader = new FileReader();
@@ -132,17 +137,22 @@ function previewAnduploadImage(image) {
 		cache: false, 
         type: 'POST',
         success: function(data){
-          alert("Success Upload");
+          sendImage(image.name)
         }
     });
-    $(".chatbot.usrInput").val("image uploaded|"+image.name);
-    //setUserResponse("image uploaded|"+image.name);
-    //send(value);
-
-	//rasa send
-	// rasa send
+    
 }
 
+function sendImage(imageName){
+    var root = document.location.hostname;
+    UserResponse = '<p class="chatbot userMsg">' + '<img class="chatbot userMsgImage" src="http://'+root+'/chatbot/uploads/'+imageName+'">' + '</p><div class="clearfix"></div>'; 
+    $(UserResponse).appendTo(".chatbot.chats").show("slow");
+    //$(".chatbot.usrInput").val("");
+    scrollToBottomOfResults();
+    showBotTyping();
+    hideBotTyping();
+    $(".chatbot.suggestions").remove();
+}
 function sleep (time) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
@@ -265,12 +275,22 @@ $("#sendButton").on("click", function(e) {
 
 //==================================== Set user response =====================================
 function setUserResponse(message) {
-    var UserResponse = '<img class="chatbot userAvatar" src=' + "./static/img/userAvatar.jpg" + '><p class="chatbot userMsg">' + message + ' </p><div class="clearfix"></div>';
+    //alert(message.match(/image uploaded[|]/g));
+    var UserResponse = "";
+    if (message.match(/image uploaded[|]/g)){
+        
+        UserResponse = '<img class="chatbot userAvatar" src=' + "./static/img/userAvatar.jpg" + '><p class="chatbot userMsg">' + message + ' </p><div class="clearfix"></div>';
+        alert(message)
+    }
+    else{
+        UserResponse = '<img class="chatbot userAvatar" src=' + "./static/img/userAvatar.jpg" + '><p class="chatbot userMsg">' + message + ' </p><div class="clearfix"></div>';        
+    }
     $(UserResponse).appendTo(".chatbot.chats").show("slow");
     $(".chatbot.usrInput").val("");
     scrollToBottomOfResults();
     showBotTyping();
     $(".chatbot.suggestions").remove();
+    
 }
 
 //=========== Scroll to the bottom of the chats after new message has been added to chat ======
