@@ -1,13 +1,5 @@
-body {
-    font-family: 'Raleway', sans-serif;
-    background: url('../img/body.png') no-repeat center center fixed;
-    background-size: cover;
-}
-
-
 /* ============= css related to chats =============== */
-
-.widget {
+.chatbot.widget {
     display: none;
     width: 350px;
     right: 15px;
@@ -19,7 +11,23 @@ body {
     box-shadow: 0 0px 1px 0 rgba(0, 0, 0, 0.16), 0 0px 10px 0 #00000096;
 }
 
-.chat_header {
+.tripledot:after {
+    content: '\2807';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -moz-font-feature-settings: 'liga';
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.chatbot.chat_header {
     height: 60px;
     background: #00A096;
     border-radius: 10px 10px 0px 0px;
@@ -27,37 +35,37 @@ body {
     font-size: 20px;
 }
 
-.chat_header_title {
+.chatbot.chat_header_title {
     color: white;
     float: left;
     margin-top: 3%;
     margin-left: 35%;
 }
 
-.chats {
+.chatbot.chats {
     /* display: none; */
     height: 385px;
     padding: 2px;
     border-radius: 1px;
     overflow-y: scroll;
     margin-top: 1px;
-    transition: 0.2s;
+    transition: 0.chatbot.2s;
 }
 
-div.chats::-webkit-scrollbar {
+div.chatbot.chats::-webkit-scrollbar {
     overflow-y: hidden;
     width: 0px;
-    /* remove scrollbar space /
+    /* remove scrollbar space */
     background: transparent;
-    / optional: just make scrollbar invisible */
+    
 }
 
-.clearfix {
+.chatbot.clearfix {
     margin-top: 2px;
     margin-bottom: 2px;
 }
 
-.botAvatar {
+.chatbot.botAvatar {
     border-radius: 50%;
     width: 1.5em;
     height: 1.5em;
@@ -66,7 +74,7 @@ div.chats::-webkit-scrollbar {
     /* border: 2px solid  #2c53af ; */
 }
 
-.botMsg {
+.chatbot.botMsg {
     float: left;
     margin-top: 5px;
     background: white;
@@ -75,30 +83,24 @@ div.chats::-webkit-scrollbar {
     margin-left: 0.5em;
     padding: 10px;
     border-radius: 1.5em;
-    max-width: 60%;
+    max-width: 80%;
     min-width: 25%;
     font-size: 13px;
     word-wrap: break-word;
     border-radius: 0 20px 20px 20px;
 }
 
-textarea {
+#userInput {
     box-shadow: none;
     resize: none;
     outline: none;
     overflow: hidden;
-    font-family: Raleway;
+    width: 80%;
+    font-family: "Century Gothic";
 }
 
-textarea::-webkit-input-placeholder {
-    font-family: Raleway;
-}
 
-textarea-webkit-scrollbar {
-    width: 0 !important
-}
-
-.userMsg {
+.chatbot.userMsg {
     animation: animateElement linear 0.2s;
     animation-iteration-count: 1;
     margin-top: 5px;
@@ -116,7 +118,7 @@ textarea-webkit-scrollbar {
     box-shadow: 0px 2px 5px 0px #9a828454;
 }
 
-.userAvatar {
+.chatbot.userAvatar {
     animation: animateElement linear 0.3s;
     animation-iteration-count: 1;
     border-radius: 50%;
@@ -127,26 +129,40 @@ textarea-webkit-scrollbar {
     /* border: 2px solid  #2c53af ; */
 }
 
-.usrInput {
+.chatbot.usrInput {
     padding: 0.5em;
-    width: 80%;
+    padding-right: 5px;
+    width: 72%;
     margin-left: 4%;
     border: 0;
     padding-left: 15px;
     height: 40px;
 }
 
-.keypad {
+.chatbot.keypad {
     /* display: none;  */
     background: white;
     height: 50px;
     position: absolute;
-    bottom: 0px;
+    bottom: 5px;
     width: 100%;
     padding: 5px;
     border-radius: 0px 0px 10px 10px;
 }
 
+#attachmentButton {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    display: inline-block;
+    float: right;
+    margin-right: 5px;
+    text-align: center;
+    padding: 5px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #00A096;
+}
 #sendButton {
     height: 20px;
     width: 20px;
@@ -161,20 +177,39 @@ textarea-webkit-scrollbar {
     color: #00A096;
 }
 
-.imgProfile {
+.chatbot.imgProfile {
     box-shadow: 0 0px 1px 0 rgba(0, 0, 0, 0.16), 0 0px 10px 0 #00000096;
     border-radius: 50px;
     width: 60%;
 }
 
-.profile_div {
+.chatbot.profile_div {
     /* display: none; */
     position: fixed;
     padding: 5px;
     width: 10%;
     bottom: 0;
+    left: none;
     right: 0;
     cursor: pointer;
+}
+
+.chatbot.profile_div .chatbot.tooltiptext {
+    visibility: hidden;
+    width: 100px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    font-size: 12px;
+    border-radius: 1px;
+    padding: 1px 0;
+    /* Position the tooltip */
+    position: relative;
+    z-index: 1;
+  }
+  
+.chatbot.profile_div:hover .chatbot.tooltiptext {
+visibility: visible;
 }
 
 
@@ -186,7 +221,7 @@ textarea-webkit-scrollbar {
     cursor: pointer;
 }
 
-.dropdown-trigger {
+.chatbot.dropdown-trigger {
     cursor: pointer;
     color: white;
     margin-right: 5px;
@@ -194,8 +229,8 @@ textarea-webkit-scrollbar {
     margin-top: 3%;
 }
 
-.dropdown-content li>a,
-.dropdown-content li>span {
+.chatbot.dropdown-content li>a,
+.chatbot.dropdown-content li>span {
     color: #00A096;
 }
 
@@ -213,10 +248,7 @@ textarea-webkit-scrollbar {
 
 /*========== css related to chats elements============= */
 
-
-/* css for card details of carousel cards */
-
-.content {
+.chatbot.content {
     transition: 0.2s;
     display: none;
     width: 350px;
@@ -229,14 +261,14 @@ textarea-webkit-scrollbar {
     box-shadow: 0px 2px 10px 1px #b5b5b5;
 }
 
-.content_header {
+.chatbot.content_header {
     object-fit: cover;
     width: 100%;
     height: 40%;
     border-radius: 10px 10px 0px 0px;
 }
 
-.content_data {
+.chatbot.content_data {
     overflow-y: scroll;
     height: 70%;
     position: absolute;
@@ -250,7 +282,7 @@ textarea-webkit-scrollbar {
     box-shadow: 0px -1px 20px 3px #9c9393ba;
 }
 
-.content_title {
+.chatbot.content_title {
     color: black;
     font-weight: 600;
     word-wrap: break-word;
@@ -286,7 +318,7 @@ textarea-webkit-scrollbar {
     margin-left: 5px;
 }
 
-.content_data>.row .col {
+.chatbot.content_data>.row .col {
     padding: 5px;
 }
 
@@ -354,11 +386,11 @@ textarea-webkit-scrollbar {
     color: #00A096;
 }
 
-div.content::-webkit-scrollbar {
+div.chatbot.content::-webkit-scrollbar {
     width: 0 !important
 }
 
-div.content_data::-webkit-scrollbar {
+div.chatbot.content_data::-webkit-scrollbar {
     overflow-y: hidden;
     width: 0px;
     /* remove scrollbar space /
@@ -367,17 +399,27 @@ div.content_data::-webkit-scrollbar {
 }
 
 
+
+
 /* css for single card */
 
-.singleCard {
+.chatbot.singleCard {
     padding-left: 10%;
     padding-right: 10px;
 }
 
+.chatbot.singleCardImage {
+    padding-left: 10%;
+    padding-right: 10px;
+    position: relative;
+    background: #ffffff;
+    color: #D3D3D3;
+
+}
 
 /* css for image card */
 
-.imgcard {
+.chatbot.imgcard {
     object-fit: contain;
     width: 100%;
     height: 90%;
@@ -388,7 +430,7 @@ div.content_data::-webkit-scrollbar {
 
 /* css for suggestions buttons */
 
-.suggestions {
+.chatbot.suggestions {
     padding: 5px;
     width: 80%;
     border-radius: 10px;
@@ -396,17 +438,17 @@ div.content_data::-webkit-scrollbar {
     box-shadow: 2px 5px 5px 1px #dbdade;
 }
 
-.menuTitle {
+.chatbot.menuTitle {
     padding: 5px;
     margin-top: 5px;
     margin-bottom: 5px;
 }
 
-.menu {
+.chatbot.menuChatbot {
     padding: 5px;
 }
 
-.menuChips {
+.chatbot.menuChips {
     display: block;
     background: #00A096;
     color: #fff;
@@ -420,175 +462,10 @@ div.content_data::-webkit-scrollbar {
 }
 
 
-/* cards carousels */
-
-.cards {
-    display: none;
-    position: relative;
-    max-width: 300px;
-}
-
-.cards_scroller {
-    overflow-x: scroll;
-    overflow-y: hidden;
-    display: flex;
-    height: 210px;
-    width: 300px;
-    transition: width 0.5s ease;
-    margin-left: 5px;
-    /* Enable Safari touch scrolling physics which is needed for scroll snap */
-    -webkit-overflow-scrolling: touch;
-}
-
-.cards_scroller img {
-    border-radius: 10px;
-}
-
-.cards div.note {
-    position: absolute;
-    /* vertically align center */
-    top: 50%;
-    transform: translateY(-50%);
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.6);
-    padding: 20px;
-    position: absolute;
-    font-size: 4em;
-    color: white;
-}
-
-.cards .arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    height: 30px;
-    width: 30px;
-    border-radius: 2px;
-    background-position: 50% 50%;
-    background-repeat: no-repeat;
-    z-index: 1;
-}
-
-.cards .arrow.next {
-    display: none;
-    font-size: 2em;
-    color: #ffffff;
-    right: 10px;
-}
-
-.cards .arrow.prev {
-    display: none;
-    font-size: 2em;
-    color: #ffffff;
-    left: 10px;
-}
-
-.cards_scroller::-webkit-scrollbar {
-    width: 0 !important
-}
-
-.cards_scroller>div.carousel_cards {
-    margin: 5px;
-    scroll-snap-align: center;
-    position: relative;
-    scroll-behavior: smooth;
-}
-
-.cards_scroller div.carousel_cards {
-    min-width: 50%;
-    min-height: 70%;
-    background: #b5b5b5;
-    border-radius: 10px;
-}
-
-@-webkit-keyframes fadeInLeft {
-    from {
-        opacity: 0;
-        -webkit-transform: translatex(-10px);
-        -moz-transform: translatex(-10px);
-        -o-transform: translatex(-10px);
-        transform: translatex(-10px);
-    }
-    to {
-        opacity: 1;
-        -webkit-transform: translatex(0);
-        -moz-transform: translatex(0);
-        -o-transform: translatex(0);
-        transform: translatex(0);
-    }
-}
-
-.in-left {
-    -webkit-animation-name: fadeInLeft;
-    -moz-animation-name: fadeInLeft;
-    -o-animation-name: fadeInLeft;
-    animation-name: fadeInLeft;
-    -webkit-animation-fill-mode: both;
-    -moz-animation-fill-mode: both;
-    -o-animation-fill-mode: both;
-    animation-fill-mode: both;
-    -webkit-animation-duration: 0.8s;
-    -moz-animation-duration: 0.8s;
-    -o-animation-duration: 0.8s;
-    animation-duration: 0.8s;
-    -webkit-animation-delay: 0.8s;
-    -moz-animation-delay: 0.8s;
-    -o-animation-duration: 0.8s;
-    animation-delay: 0.8s;
-}
-
-
-/* css for cards within the cards carousels */
-
-.cardBackgroundImage {
-    width: 100%;
-    border-radius: 5px;
-    height: 100%;
-    position: absolute;
-    object-fit: cover;
-}
-
-.cardFooter {
-    background: rgba(56, 53, 60, 0.86);
-    border-radius: 0px 0px 5px 5px;
-    position: absolute;
-    z-index: 3;
-    color: white;
-    bottom: 0;
-    width: 100%;
-    height: 30%;
-    word-wrap: break-word;
-    padding: 1px;
-}
-
-.cardTitle {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    width: 90%;
-    height: 40%;
-    display: inline-block;
-    margin-bottom: 1px;
-    font-size: 15px;
-    /* font-weight: 600; */
-    padding: 5px;
-    /* color: #2c53af; */
-    color: #ffffff;
-    cursor: pointer;
-}
-
-.cardDescription {
-    padding: 5px;
-    font-size: 13px;
-    color: white;
-    line-height: 15px;
-}
-
 
 /*css for dropDown messages*/
 
-.dropDownMsg {
+.chatbot.dropDownMsg {
     float: left;
     margin-top: 5px;
     background: white;
@@ -603,14 +480,14 @@ div.content_data::-webkit-scrollbar {
     word-wrap: break-word;
 }
 
-.dropDownMsg>select {
+.chatbot.dropDownMsg>select {
     border: 0px solid #f2f2f2;
 }
 
 
 /* css for quick replies */
 
-.quickReplies {
+.chatbot.quickReplies {
     padding: 5px;
     position: relative;
     width: 100%;
@@ -625,17 +502,17 @@ div.content_data::-webkit-scrollbar {
     scroll-behavior: smooth;
 }
 
-.quickReplies::-webkit-scrollbar {
+.chatbot.quickReplies::-webkit-scrollbar {
     width: 0 !important
 }
 
-.quickReplies.active {
+.chatbot.quickReplies.active {
     cursor: grabbing;
     cursor: -webkit-grabbing;
     transform: scale(1);
 }
 
-.chip {
+.chatbot.chip {
     background-color: white;
     border: 1px solid #2c53af;
     color: #00A096;
@@ -643,7 +520,7 @@ div.content_data::-webkit-scrollbar {
     text-align: center;
 }
 
-.chip:hover {
+.chatbot.chip:hover {
     background-color: #00A096;
     color: white;
 }
@@ -651,22 +528,38 @@ div.content_data::-webkit-scrollbar {
 
 /* css for charts */
 
-#expand:hover {
+.chatbot.expand:hover {
     font-size: 18px;
 }
 
-#expand {
+.chatbot.expand {
     position: absolute;
     right: 10px;
     top: 10px;
 }
 
-.modal {
-    height: 60%;
-    border-radius: 10px;
+.chatbot.imageexpand:hover {
+    font-size: 18px;
 }
 
-.chart-container {
+.chatbot.imageexpand {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+.chatbot.imageModal.modal-dialog{
+    text-align:center;
+
+}
+
+.chatbot.imageModal .modal-content{
+    display:inline-block; 
+    width: inherit;
+}
+
+
+.chatbot.chart-container {
     position: relative;
     margin: auto;
     height: 25vh;
@@ -681,7 +574,7 @@ div.content_data::-webkit-scrollbar {
 
 /* css for collapsible */
 
-.collapsible {
+.chatbot.collapsible {
     margin-top: 5px;
     margin-left: 5%;
     max-width: 60%;
@@ -692,11 +585,11 @@ div.content_data::-webkit-scrollbar {
     background: white;
 }
 
-.collapsible-body {
+.chatbot.collapsible-body {
     padding: 15px;
 }
 
-.collapsible-header {
+.chatbot.collapsible-header {
     font-weight: bold;
     color: #00A096;
 }
@@ -719,9 +612,10 @@ ul.collapsible>li:last-child .collapsible-body {
 }
 
 
+
 /* css for botTyping */
 
-.botTyping {
+.chatbot.botTyping {
     float: left;
     margin-top: 5px;
     background: white;
@@ -736,7 +630,7 @@ ul.collapsible>li:last-child .collapsible-body {
     border-radius: 0 20px 20px 20px;
 }
 
-.botTyping>div {
+.chatbot.botTyping>div {
     width: 10px;
     height: 10px;
     background-color: #00A096;
@@ -747,12 +641,12 @@ ul.collapsible>li:last-child .collapsible-body {
     margin-right: 5px;
 }
 
-.botTyping .bounce1 {
+.chatbot.botTyping .bounce1 {
     -webkit-animation-delay: -0.32s;
     animation-delay: -0.32s;
 }
 
-.botTyping .bounce2 {
+.chatbot.botTyping .bounce2 {
     -webkit-animation-delay: -0.16s;
     animation-delay: -0.16s;
 }
@@ -785,13 +679,16 @@ input:focus {
     outline: none;
 }
 
+
+
 video:focus {
     outline: none;
 }
 
-.video-container iframe,
-.video-container object,
-.video-container embed {
+
+.chatbot.video-container iframe,
+.chatbot.video-container object,
+.chatbot.video-container embed {
     position: absolute;
     top: 0;
     left: 0;
@@ -805,12 +702,12 @@ video:focus {
 
 /* Bot pop-up intro */
 
-.tap-target {
+.chatbot.tap-target {
     color: #fff;
     background: #00A096;
 }
 
-.pdf_attachment {
+.chatbot.pdf_attachment {
     border: 0.5px solid #00000014;
     width: 60%;
     height: 14%;
@@ -819,7 +716,7 @@ video:focus {
     box-shadow: 2px 3px 9px 0px #9a82842e;
 }
 
-.pdf_icon {
+.chatbot.pdf_icon {
     border-radius: 10px 0px 0px 10px;
     height: 100%;
     font-size: 25px;
@@ -828,13 +725,13 @@ video:focus {
     color: white;
 }
 
-.pdf_link {
+.chatbot.pdf_link {
     padding: 5% !important;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.pdf_link a {
+.chatbot.pdf_link a {
     color: #00A096;
 }

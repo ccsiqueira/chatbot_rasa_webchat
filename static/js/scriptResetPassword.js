@@ -1,47 +1,23 @@
-document.addEventListener('DOMContentLoaded', function() {
-    //var elemsTap = document.querySelector('.tap-target');
-    //var instancesTap = M.TapTarget.init(elemsTap, {});
-    //instancesTap.open();
-    //setTimeout(function() { instancesTap.close(); }, 4000);
-
-});
 $(document).ready(function() {
-
-
-    //Bot pop-up intro
-    $("div").removeClass("tap-target-origin")
-
     //drop down menu for close, restart conversation & clear the chats.
-    $('.dropdown-trigger').dropdown();
-
-    //initiate the modal for displaying the charts, if you dont have charts, then you comment the below line
-    $('.modal').modal();
-
-
-
+    //$('.dropdown-trigger').dropdown();
     //enable this if u have configured the bot to start the conversation. 
     // showBotTyping();
     // $("#userInput").prop('disabled', true);
-
     //global variables
     action_name = "ok wings";
     var d = new Date();
     var n = String(d.getTime());
-    user_id = n;
-
-    url_link="https://apichat.wingscorp.com"
-    //url_link="127.0.0.1"
+    user_id = n+"|1234";
+    
+    //user_id = "william.limas@wingscorp.com"
+    //url_link="https://apichat.wingscorp.com"
+    url_link="http://localhost"
     //if you want the bot to start the conversation
     //action_trigger();
-    restartConversation()
-    //send("/restart")
     
+    //send("/restart")  
 })
-
-function sleep (time) {
-  return new Promise((resolve) => setTimeout(resolve, time));
-}
-
 // Usage!
 
 
@@ -49,21 +25,37 @@ function sleep (time) {
 // ========================== restart conversation ========================
 function restartConversation() {
     $("#userInput").prop('disabled', true);
-    //destroy the existing chart
-    $('.collapsible').remove();
-
+    
     if (typeof chatChart !== 'undefined') { chatChart.destroy(); }
 
-    $(".chart-container").remove();
+    $(".chatbot.chart-container").remove();
     if (typeof modalChart !== 'undefined') { modalChart.destroy(); }
-    $(".chats").html("");
-    $(".usrInput").val("");
+    $(".chatbot.chats").html("");
+    $(".chatbot.usrInput").val("");
     send("/restart");
-    sleep(2000).then(() => {
+    //sleep(2000).then(() => {
         send("ok wings")
     // Do something after the sleep!
-    });
+    //});
 }
+
+function restartConversationInitial() {
+    $("#userInput").prop('disabled', true);
+    
+    if (typeof chatChart !== 'undefined') { chatChart.destroy(); }
+
+    $(".chatbot.chart-container").remove();
+    if (typeof modalChart !== 'undefined') { modalChart.destroy(); }
+    $(".chatbot.chats").html("");
+    $(".chatbot.usrInput").val("");
+    
+    send("/restart");
+    setTimeout(function() {
+        send("ok wings")
+    },1000)
+   
+}
+
 
 // ========================== let the bot start the conversation ========================
 function action_trigger() {
@@ -92,11 +84,11 @@ function action_trigger() {
     });
 }
 
-//===================================== user enter or sends the message =====================
-$(".usrInput").on("keyup keypress", function(e) {
+//=====================================	user enter or sends the message =====================
+$(".chatbot.usrInput").on("keyup keypress", function(e) {
     var keyCode = e.keyCode || e.which;
 
-    var text = $(".usrInput").val();
+    var text = $(".chatbot.usrInput").val();
     if (keyCode === 13) {
 
         if (text == "" || $.trim(text) == "") {
@@ -107,15 +99,15 @@ $(".usrInput").on("keyup keypress", function(e) {
             $('.collapsible').remove();
             if (typeof chatChart !== 'undefined') { chatChart.destroy(); }
 
-            $(".chart-container").remove();
+            $(".chatbot.chart-container").remove();
             if (typeof modalChart !== 'undefined') { modalChart.destroy(); }
 
 
 
             $("#paginated_cards").remove();
-            $(".suggestions").remove();
-            $(".quickReplies").remove();
-            $(".usrInput").blur();
+            $(".chatbot.suggestions").remove();
+            $(".chatbot.quickReplies").remove();
+            $(".chatbot.usrInput").blur();
             setUserResponse(text);
             send(text);
             e.preventDefault();
@@ -125,21 +117,17 @@ $(".usrInput").on("keyup keypress", function(e) {
 });
 
 $("#sendButton").on("click", function(e) {
-    var text = $(".usrInput").val();
+    alert("hello from send")
+    var text = $(".chatbot.usrInput").val();
     if (text == "" || $.trim(text) == "") {
         e.preventDefault();
         return false;
     } else {
-        //destroy the existing chart
 
-        chatChart.destroy();
-        $(".chart-container").remove();
-        if (typeof modalChart !== 'undefined') { modalChart.destroy(); }
-
-        $(".suggestions").remove();
+        $(".chatbot.suggestions").remove();
         $("#paginated_cards").remove();
-        $(".quickReplies").remove();
-        $(".usrInput").blur();
+        $(".chatbot.quickReplies").remove();
+        $(".chatbot.usrInput").blur();
         setUserResponse(text);
         send(text);
         e.preventDefault();
@@ -149,13 +137,12 @@ $("#sendButton").on("click", function(e) {
 
 //==================================== Set user response =====================================
 function setUserResponse(message) {
-    var UserResponse = '<img class="userAvatar" src=' + "./static/img/userAvatar.jpg" + '><p class="userMsg">' + message + ' </p><div class="clearfix"></div>';
-    $(UserResponse).appendTo(".chats").show("slow");
-
+    var UserResponse = '<img class="chatbot userAvatar" src=' + "./static/img/userAvatar.jpg" + '><p class="chatbot userMsg">' + message + ' </p><div class="chatbot clearfix"></div>';
+    $(UserResponse).appendTo(".chatbot.chats").show("slow");
     $(".usrInput").val("");
     scrollToBottomOfResults();
     showBotTyping();
-    $(".suggestions").remove();
+    $(".chatbot.suggestions").remove();
 }
 
 //=========== Scroll to the bottom of the chats after new message has been added to chat ======
@@ -168,7 +155,7 @@ function scrollToBottomOfResults() {
 //============== send the user message to rasa server =============================================
 function send(message) {
     url_nya = url_link+":5005/webhooks/rest/webhook"
-    sleep(2000).then(() => {
+    //sleep(2000).then(() => {
         $.ajax({
             url: url_nya,
             type: "POST",
@@ -204,23 +191,21 @@ function send(message) {
             }
         });
     // Do something after the sleep!
-    });
-    
+    //});
 }
 
 //=================== set bot response in the chats ===========================================
 function setBotResponse(response) {
-
     //display bot response after 500 milliseconds
     setTimeout(function() {
         hideBotTyping();
         if (response.length < 1) {
             //if there is no response from Rasa, send  fallback message to the user
-            var fallbackMsg = "I am facing some issues, please try again later!!!";
+            var fallbackMsg = "Server mengalami kendala, tolong restart halaman";
 
-            var BotResponse = '<img class="botAvatar" src="./static/img/sara_avatar.png"/><p class="botMsg">' + fallbackMsg + '</p><div class="clearfix"></div>';
+            var BotResponse = '<img class="chatbot botAvatar" src="./static/img/sara_avatar.png"/><p class="chatbot botMsg">' + fallbackMsg + '</p><div class="chatbot clearfix"></div>';
 
-            $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
+            $(BotResponse).appendTo(".chatbot.chats").hide().fadeIn(1000);
             scrollToBottomOfResults();
         } else {
 
@@ -229,14 +214,14 @@ function setBotResponse(response) {
 
                 //check if the response contains "text"
                 if (response[i].hasOwnProperty("text")) {
-                    var BotResponse = '<img class="botAvatar" src="./static/img/sara_avatar.png"/><p class="botMsg">' + response[i].text + '</p><div class="clearfix"></div>';
-                    $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
+                    var BotResponse = '<img class="chatbot botAvatar" src="./static/img/sara_avatar.png"/><p class="chatbot botMsg"><span style="white-space: pre-line">' + response[i].text + '</span></p><div class="chatbot clearfix"></div>';
+                    $(BotResponse).appendTo(".chatbot.chats").hide().fadeIn(1000);
                 }
 
                 //check if the response contains "images"
                 if (response[i].hasOwnProperty("image")) {
-                    var BotResponse = '<div class="singleCard">' + '<img class="imgcard" src="' + response[i].image + '">' + '</div><div class="clearfix">';
-                    $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
+                    var BotResponse = '<div class="chatbot singleCard">' + '<img class="chatbot imgcard" src="' + response[i].image + '">' + '</div><div class="chatbot clearfix">';
+                    $(BotResponse).appendTo(".chatbot.chats").hide().fadeIn(1000);
                 }
 
 
@@ -252,8 +237,8 @@ function setBotResponse(response) {
                     if (response[i].attachment.type == "video") {
                         video_url = response[i].attachment.payload.src;
 
-                        var BotResponse = '<div class="video-container"> <iframe src="' + video_url + '" frameborder="0" allowfullscreen></iframe> </div>'
-                        $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
+                        var BotResponse = '<div class="chatbot video-container"> <iframe src="' + video_url + '" frameborder="0" allowfullscreen></iframe> </div>'
+                        $(BotResponse).appendTo(".chatbot.chats").hide().fadeIn(1000);
                     }
 
                 }
@@ -327,13 +312,14 @@ function setBotResponse(response) {
             }
             scrollToBottomOfResults();
         }
-    }, 1500);
+    }, 10);
 }
 
 //====================================== Toggle chatbot =======================================
 $("#profile_div").click(function() {
-    $(".profile_div").toggle();
-    $(".widget").toggle();
+    restartConversationInitial()
+    $("#profile_div").toggle();
+    $(".chatbot.widget").toggle();
 });
 
 
@@ -342,15 +328,15 @@ function renderPdfAttachment(data) {
     pdf_url = data.custom.url;
     pdf_title = data.custom.title;
     pdf_attachment =
-        '<div class="pdf_attachment">' +
-        '<div class="row">' +
-        '<div class="col s3 pdf_icon"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></div>' +
-        '<div class="col s9 pdf_link">' +
+        '<div class="chatbot pdf_attachment">' +
+        '<div class="chatbot row">' +
+        '<div class="chatbot col s3 pdf_icon"><i class="chatbot fa fa-file-pdf-o" aria-hidden="true"></i></div>' +
+        '<div class="chatbot col s9 pdf_link">' +
         '<a href="' + pdf_url + '" target="_blank">' + pdf_title + ' </a>' +
         '</div>' +
         '</div>' +
         '</div>'
-    $(".chats").append(pdf_attachment);
+    $(".chatbot.chats").append(pdf_attachment);
     scrollToBottomOfResults();
 
 }
@@ -364,7 +350,7 @@ function renderDropDwon(data) {
     for (i = 0; i < data.length; i++) {
         options += '<option value="' + data[i].value + '">' + data[i].label + '</option>'
     }
-    var select = '<div class="dropDownMsg"><select class="browser-default dropDownSelect"> <option value="" disabled selected>Choose your option</option>' + options + '</select></div>'
+    var select = '<div class="chatbot dropDownMsg"><select class="chatbot browser-default dropDownSelect"> <option value="" disabled selected>Choose your option</option>' + options + '</select></div>'
     $(".chats").append(select);
     scrollToBottomOfResults();
 
@@ -379,7 +365,7 @@ function renderDropDwon(data) {
 
         setUserResponse(label);
         send(value);
-        $(".dropDownMsg").remove();
+        $(".chatbot.dropDownMsg").remove();
     });
 }
 
@@ -389,49 +375,50 @@ function addSuggestion(textToAdd) {
     setTimeout(function() {
         var suggestions = textToAdd;
         var suggLength = textToAdd.length;
-        $(' <div class="singleCard"> <div class="suggestions"><div class="menu"></div></div></diV>').appendTo(".chats").hide().fadeIn(1000);
+        $(' <div class="chatbot singleCard"> <div class="chatbot suggestions"><div class="chatbot menuChatbot"></div></div></diV>').appendTo(".chatbot.chats").hide().fadeIn(1000);
         // Loop through suggestions
         for (i = 0; i < suggLength; i++) {
-            $('<div class="menuChips" data-payload=\'' + (suggestions[i].payload) + '\'>' + suggestions[i].title + "</div>").appendTo(".menu");
+            $('<div class="chatbot menuChips" data-payload=\'' + (suggestions[i].payload) + '\'>' + suggestions[i].title + "</div>").appendTo(".chatbot.menuChatbot");
         }
         scrollToBottomOfResults();
     }, 1000);
 }
 
 // on click of suggestions, get the value and send to rasa
-$(document).on("click", ".menu .menuChips", function() {
+$(document).on("click", ".chatbot.menuChatbot .menuChips", function() {
     var text = this.innerText;
     var payload = this.getAttribute('data-payload');
     console.log("payload: ", this.getAttribute('data-payload'))
     setUserResponse(text);
     send(payload);
-
     //delete the suggestions once user click on it
-    $(".suggestions").remove();
-
+    $(".chatbot.suggestions").remove();
 });
 
 //====================================== functions for drop-down menu of the bot  =========================================
 
+
 //restart function to restart the conversation.
 $("#restart").click(function() {
-    restartConversation()
+    restartConversationInitial()
 });
 
 //clear function to clear the chat contents of the widget.
 $("#clear").click(function() {
-    $(".chats").fadeOut("normal", function() {
-        $(".chats").html("");
-        $(".chats").fadeIn();
+    $(".chatbot.chats").fadeOut("normal", function() {
+        $(".chatbot.chats").html("");
+        $(".chatbot.chats").fadeIn();
     });
-    restartConversation()
+    restartConversationInitial()
 });
 
 //close function to close the widget.
 $("#close").click(function() {
-    $(".profile_div").toggle();
-    $(".widget").toggle();
-    scrollToBottomOfResults();
+    $("#profile_div").toggle();
+    $(".chatbot.widget").toggle();
+    $(".chatbot.chats").html("");
+    restartConversationInitial()
+
 });
 
 //====================================== Cards Carousel =========================================
@@ -439,7 +426,7 @@ $("#close").click(function() {
 function showCardsCarousel(cardsToAdd) {
     var cards = createCardsCarousel(cardsToAdd);
 
-    $(cards).appendTo(".chats").show();
+    $(cards).appendTo(".chatbot.chats").show();
 
 
     if (cardsToAdd.length <= 2) {
@@ -483,12 +470,12 @@ function createCardsCarousel(cardsData) {
         title = cardsData[i].name;
         ratings = Math.round((cardsData[i].ratings / 5) * 100) + "%";
         data = cardsData[i];
-        item = '<div class="carousel_cards in-left">' + '<img class="cardBackgroundImage" src="' + cardsData[i].image + '"><div class="cardFooter">' + '<span class="cardTitle" title="' + title + '">' + title + "</span> " + '<div class="cardDescription">' + '<div class="stars-outer">' + '<div class="stars-inner" style="width:' + ratings + '" ></div>' + "</div>" + "</div>" + "</div>" + "</div>";
+        item = '<div class="chatbot carousel_cards in-left">' + '<img class="chatbot cardBackgroundImage" src="' + cardsData[i].image + '"><div class="chatbot cardFooter">' + '<span class="chatbot cardTitle" title="' + title + '">' + title + "</span> " + '<div class="chatbot cardDescription">' + '<div class="chatbot stars-outer">' + '<div class="chatbot stars-inner" style="width:' + ratings + '" ></div>' + "</div>" + "</div>" + "</div>" + "</div>";
 
         cards += item;
     }
 
-    var cardContents = '<div id="paginated_cards" class="cards"> <div class="cards_scroller">' + cards + '  <span class="arrow prev fa fa-chevron-circle-left "></span> <span class="arrow next fa fa-chevron-circle-right" ></span> </div> </div>';
+    var cardContents = '<div id="paginated_cards" class="chatbot cards"> <div class="chatbot cards_scroller">' + cards + '  <span class="chatbot arrow prev fa fa-chevron-circle-left "></span> <span class="chatbot arrow next fa fa-chevron-circle-right" ></span> </div> </div>';
 
     return cardContents;
 }
@@ -498,12 +485,12 @@ function createCardsCarousel(cardsData) {
 function showQuickReplies(quickRepliesData) {
     var chips = ""
     for (i = 0; i < quickRepliesData.length; i++) {
-        var chip = '<div class="chip" data-payload=\'' + (quickRepliesData[i].payload) + '\'>' + quickRepliesData[i].title + '</div>'
+        var chip = '<div class="chatbot chip" data-payload=\'' + (quickRepliesData[i].payload) + '\'>' + quickRepliesData[i].title + '</div>'
         chips += (chip)
     }
 
-    var quickReplies = '<div class="quickReplies">' + chips + '</div><div class="clearfix"></div>'
-    $(quickReplies).appendTo(".chats").fadeIn(1000);
+    var quickReplies = '<div class="chatbot quickReplies">' + chips + '</div><div class="chatbot clearfix"></div>'
+    $(quickReplies).appendTo(".chatbot.chats").fadeIn(1000);
     scrollToBottomOfResults();
     const slider = document.querySelector('.quickReplies');
     let isDown = false;
@@ -535,7 +522,7 @@ function showQuickReplies(quickRepliesData) {
 }
 
 // on click of quickreplies, get the value and send to rasa
-$(document).on("click", ".quickReplies .chip", function() {
+$(document).on("click", ".chatbot.quickReplies .chip", function() {
     var text = this.innerText;
     var payload = this.getAttribute('data-payload');
     console.log("chip payload: ", this.getAttribute('data-payload'))
@@ -543,7 +530,7 @@ $(document).on("click", ".quickReplies .chip", function() {
     send(payload);
 
     //delete the quickreplies
-    $(".quickReplies").remove();
+    $(".chatbot.quickReplies").remove();
 
 });
 
@@ -587,7 +574,7 @@ function handleLocationAccessError(error) {
     response = '/inform{"user_location":"deny"}';
     send(response);
     showBotTyping();
-    $(".usrInput").val("");
+    $(".chatbot.usrInput").val("");
     $("#userInput").prop('disabled', false);
 
 
@@ -596,8 +583,8 @@ function handleLocationAccessError(error) {
 //======================================bot typing animation ======================================
 function showBotTyping() {
 
-    var botTyping = '<img class="botAvatar" id="botAvatar" src="./static/img/sara_avatar.png"/><div class="botTyping">' + '<div class="bounce1"></div>' + '<div class="bounce2"></div>' + '<div class="bounce3"></div>' + '</div>'
-    $(botTyping).appendTo(".chats");
+    var botTyping = '<img class="chatbot botAvatar" id="botAvatar" src="./static/img/sara_avatar.png"/><div class="chatbot botTyping">' + '<div class="chatbot bounce1"></div>' + '<div class="chatbot bounce2"></div>' + '<div class="chatbot bounce3"></div>' + '</div>'
+    $(botTyping).appendTo(".chatbot.chats");
     $('.botTyping').show();
     scrollToBottomOfResults();
 }
@@ -617,13 +604,13 @@ function createCollapsible(data) {
     list = "";
     for (i = 0; i < data.length; i++) {
         item = '<li>' +
-            '<div class="collapsible-header">' + data[i].title + '</div>' +
-            '<div class="collapsible-body"><span>' + data[i].description + '</span></div>' +
+            '<div class="chatbot collapsible-header">' + data[i].title + '</div>' +
+            '<div class="chatbot collapsible-body"><span>' + data[i].description + '</span></div>' +
             '</li>'
         list += item;
     }
-    var contents = '<ul class="collapsible">' + list + '</uL>';
-    $(contents).appendTo(".chats");
+    var contents = '<ul class="chatbot collapsible">' + list + '</uL>';
+    $(contents).appendTo(".chatbot.chats");
 
     // initialize the collapsible
     $('.collapsible').collapsible();
@@ -638,7 +625,7 @@ function createChart(title, labels, backgroundColor, chartsData, chartType, disp
 
     //create the ".chart-container" div that will render the charts in canvas as required by charts.js,
     // for more info. refer: https://www.chartjs.org/docs/latest/getting-started/usage.html
-    var html = '<div class="chart-container"> <span class="modal-trigger" id="expand" title="expand" href="#modal1"><i class="fa fa-external-link" aria-hidden="true"></i></span> <canvas id="chat-chart" ></canvas> </div> <div class="clearfix"></div>'
+    var html = '<div class="chatbot chart-container"> <span class="chatbot modal-trigger" id="expand" title="expand" href="#modal1"><i class="chatbot fa fa-external-link" aria-hidden="true"></i></span> <canvas id="chat-chart" ></canvas> </div> <div class="chatbot clearfix"></div>'
     $(html).appendTo('.chats');
 
     //create the context that will draw the charts over the canvas in the ".chart-container" div

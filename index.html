@@ -2,14 +2,17 @@
 
 <head>
     <title>Virtual Asistant Wings Groups</title>
-
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+    
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Raleway:500&display=swap" rel="stylesheet">
-
+    
+    <!--Uploader-->
+    <link rel="stylesheet" href="static/css/uploader.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    
     <!--Import Font Awesome Icon Font-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
     
@@ -20,47 +23,103 @@
     <!--Main css-->
     <link rel="stylesheet" type="text/css" href="static/css/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+    .tripledot:after {
+        content: '\2807';
+        font-weight: normal;
+        font-style: normal;
+        font-size: 24px;
+        line-height: 1;
+        letter-spacing: normal;
+        text-transform: none;
+        display: inline-block;
+        white-space: nowrap;
+        word-wrap: normal;
+        direction: ltr;
+        -moz-font-feature-settings: 'liga';
+        -moz-osx-font-smoothing: grayscale;
+    }
+    </style>
 
 </head>
 
 <body>
+    
     <div class="container">
 
         <!-- Modal for rendering the charts, declare this if you want to render charts, 
          else you remove the modal -->
-        <div id="modal" class="modal">
-            <canvas id="modal-chart"></canvas>
+        <!--div id="modal" class="modal"-->
+            <!--canvas id="modal-chart"></canvas-->
+        <!--/div-->
+        <div class="chatbot modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Presentase Cuti Anda</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <canvas class="chatbot modal-chart"></canvas>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chatbot imageModal modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" style="display:inline-block; width: inherit;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img id="my_image"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                </div>
+                </div>
+            </div>
         </div>
 
         <!--chatbot widget -->
-        <div class="widget">
-            <div class="chat_header">
-
+        <div class="chatbot widget" id="chatbot_widget">
+            <div class="chatbot chat_header">
                 <!--Add the name of the bot here -->
-                <span class="chat_header_title">Wings VA</span>
-                <span class="dropdown-trigger" href='#' data-target='dropdown1'>
-                  <i class="material-icons">
-                  more_vert
-                  </i>
-               </span>
+                <span class="chatbot chat_header_title">Wings VA</span> 
+                </span>
             </div>
 
             <!--Chatbot contents goes here -->
-            <div class="chats" id="chats">
+            <div class="chatbot chats" id="chats">
                 <div class="clearfix"></div>
 
             </div>
 
             <!--keypad for user to type the message -->
             <div class="keypad">
-                <textarea id="userInput" placeholder="Type a message..." class="usrInput"></textarea>
-                <div id="sendButton"><i class="fa fa-paper-plane" aria-hidden="true"></i></div>
+                <div id="drop-region">
+                    <textarea id="userInput" placeholder="Ketik Pesan ..." class="chatbot usrInput"></textarea>
+                    <div id="sendButton"><i class="fa fa-paper-plane" aria-hidden="true"></i></div>
+                    
+                    <!--div id="attachmentButton"><i class="fa fa-paperclip" aria-hidden="true"></i></div-->
+                </div>
             </div>
+            
         </div>
+        <div id="image-preview"></div>
 
         <!--bot profile-->
-        <div class="profile_div" id="profile_div">
-            <img class="imgProfile" src="static/img/botAvatar.png" />
+        <div class="chatbot profile_div" id="profile_div" onmousedown=rightclick(event); >
+            <span class="chatbot tooltiptext">Kecilkan (CTRL + Click)</span>
+            <img class="chatbot imgProfile" src="static/img/botAvatar.png" />
         </div>
 
     </div>
@@ -68,7 +127,7 @@
     <!--JavaScript at end of body for optimized loading-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!--script type="text/javascript" src="static/js/materialize.min.js"></script-->
-    
+    <!--script type="text/javascript" src="static/js/uploader.js"></script-->
     <script type="text/javascript" src="static/js/bootstrap.min.js"></script>
     <!--Main Script -->
     <script type="text/javascript" src="static/js/script.js"></script>
