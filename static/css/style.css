@@ -567,7 +567,7 @@ div.chatbot.content_data::-webkit-scrollbar {
 .chatbot.chart-container {
     position: relative;
     margin: auto;
-    height: 25vh;
+    height: auto;
     width: 20vw;
     border-radius: 10px 10px 10px 10px;
     margin-left: 5%;

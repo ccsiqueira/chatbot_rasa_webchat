@@ -15,11 +15,12 @@ $(document).ready(function() {
     
     //user_id = "william.limas@wingscorp.com"
     //url_link="https://apichat.wingscorp.com"
-    url_link="http://localhost"
+    //url_link="https://apifrdev.wingscorp.com:5005"
+    D:url_link="http://localhost"
     //if you want the bot to start the conversation
     //action_trigger();
     //restartConversationInitial()
-    //send("/restart")  
+    //send("/restart")
 })
 
 //===========================uploader ============================================
@@ -361,17 +362,19 @@ function setBotResponse(response) {
             for (i = 0; i < response.length; i++) {
 
                 //check if the response contains "text"
+                if (response[i].hasOwnProperty("image")) {
+                    imagesrc = response[i].image;
+                    var BotResponse = '<div class="chatbot singleCardImage"><span class="chatbot modal-trigger imageexpand" id="expand" title="image expand" data-toggle="modal" data-target="#imageModal"><i class="chatbot fa fa-external-link" aria-hidden="true"></i></span>' + '<img class="chatbot imgcard" src="' + response[i].image+'">' + '</div><div class="chatbot clearfix"></div>';
+                    $(BotResponse).appendTo(".chatbot.chats").hide().fadeIn(1000);
+                }
+                
                 if (response[i].hasOwnProperty("text")) {
                     var BotResponse = '<img class="chatbot botAvatar" src="./static/img/sara_avatar.png"/><p class="chatbot botMsg"><span style="white-space: pre-line">' + response[i].text + '</span></p><div class="chatbot clearfix"></div>';
                     $(BotResponse).appendTo(".chatbot.chats").hide().fadeIn(1000);
                 }
 
                 //check if the response contains "images"
-                if (response[i].hasOwnProperty("image")) {
-                    imagesrc = response[i].image;
-                    var BotResponse = '<div class="chatbot singleCardImage"><span class="chatbot modal-trigger imageexpand" id="expand" title="image expand" data-toggle="modal" data-target="#imageModal"><i class="chatbot fa fa-external-link" aria-hidden="true"></i></span>' + '<img class="chatbot imgcard" src="' + response[i].image+'">' + '</div><div class="chatbot clearfix"></div>';
-                    $(BotResponse).appendTo(".chatbot.chats").hide().fadeIn(1000);
-                }
+                
 
 
                 //check if the response contains "buttons" 
@@ -438,16 +441,35 @@ function setBotResponse(response) {
 
                         //store the below parameters as global variable, 
                         // so that it can be used while displaying the charts in modal.
-                        chartData = (response[i].custom.data)
-                        title = chartData.title;
-                        labels = chartData.labels;
-                        backgroundColor = chartData.backgroundColor;
-                        chartsData = chartData.chartsData;
-                        chartType = chartData.chartType;
-                        displayLegend = chartData.displayLegend;
+                        chartDataList = response[i].custom.data
+                        for (var i = 0; i < chartDataList.length; i++) {
+                            chartData = chartDataList[i]
+                            canvas_id = chartData.canvas_id
+                            title = chartData.title;
+                            labels = chartData.labels;
+                            backgroundColor = chartData.backgroundColor;
+                            chartsData = chartData.chartsData;
+                            chartType = chartData.chartType;
+                            displayLegend = chartData.displayLegend;
+                            createChart(title, labels, backgroundColor, chartsData, chartType, displayLegend,canvas_id)
+
+
+
+                        
+                        }
+                        //chartDataList.forEach(function (chartData, index) {
+                            //console.log(item, index);
+                            
+
+                        
+                        //});
+                        //chartData = (response[i].custom.data[0])
+                        
+                        
 
                         // pass the above variable to createChart function
-                        createChart(title, labels, backgroundColor, chartsData, chartType, displayLegend)
+                        
+                       
                         return;
                     }
 
@@ -818,15 +840,15 @@ function createCollapsible(data) {
 //====================================== creating Charts ======================================
 
 //function to create the charts & render it to the canvas
-function createChart(title, labels, backgroundColor, chartsData, chartType, displayLegend) {
+function createChart(title, labels, backgroundColor, chartsData, chartType, displayLegend,canvas_id) {
 
     //create the ".chart-container" div that will render the charts in canvas as required by charts.js,
     // for more info. refer: https://www.chartjs.org/docs/latest/getting-started/usage.html
-    var html = '<div class="chatbot chart-container"> <span class="chatbot modal-trigger expand" id="expand" title="expand" data-toggle="modal" data-target="#exampleModal"><i class="chatbot fa fa-external-link" aria-hidden="true"></i></span> <canvas id="chat-chart" ></canvas> </div> <div class="chatbot clearfix"></div>'
-    $(html).appendTo('.chats');
+    var html = '<div class="chatbot chart-container "'+canvas_id+'> <span class="chatbot modal-trigger expand" id="expand" title="expand" data-toggle="modal" data-target="#exampleModal"><i class="chatbot fa fa-external-link" aria-hidden="true"></i></span> <canvas id="'+canvas_id+'" ></canvas> </div> <div class="chatbot clearfix"></div>'
+    $(html).appendTo('.chatbot.chats');
 
     //create the context that will draw the charts over the canvas in the ".chart-container" div
-    var ctx = $('#chat-chart');
+    var ctx = $('#'+canvas_id);
 
     // Once you have the element or context, instantiate the chart-type by passing the configuration,
     //for more info. refer: https://www.chartjs.org/docs/latest/configuration/
@@ -868,6 +890,7 @@ function createChart(title, labels, backgroundColor, chartsData, chartType, disp
         data: data,
         options: options
     });
+
 
     scrollToBottomOfResults();
 }
