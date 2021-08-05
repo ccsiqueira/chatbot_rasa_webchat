@@ -1,4 +1,3 @@
-
 $(document).ready(function() {
     //drop down menu for close, restart conversation & clear the chats.
     //$('.dropdown-trigger').dropdown();
@@ -16,7 +15,7 @@ $(document).ready(function() {
     //user_id = "william.limas@wingscorp.com"
     //url_link="https://apichat.wingscorp.com"
     //url_link="https://apifrdev.wingscorp.com:5005"
-    D:url_link="http://localhost"
+    url_link="http://localhost"
     //if you want the bot to start the conversation
     //action_trigger();
     //restartConversationInitial()
@@ -70,11 +69,11 @@ function handleDrop(e) {
 
 
 function handleFiles(files) {
-    images = "image uploaded|"
+    images = "image uploaded|\n"
 	for (var i = 0, len = files.length; i < len; i++) {
 		if (validateImage(files[i])){
 			previewAnduploadImage(files[i]);
-            images +=files[i].name+","
+            images +=files[i].name+",\n"
             
         }      
 	}
@@ -86,14 +85,14 @@ function validateImage(image) {
 	// check the type
 	var validTypes = ['image/jpeg', 'image/png', 'image/gif'];
 	if (validTypes.indexOf( image.type ) === -1) {
-		alert("Invalid File Type");
+		alert("File harus dalam format JPG, GIF, PNG");
 		return false;
 	}
 
 	// check the size
 	var maxSizeInBytes = 10e6; // 10MB
 	if (image.size > maxSizeInBytes) {
-		alert("File too large");
+		alert("Size Maksimum Gambar 10 MB");
 		return false;
 	}
 
@@ -102,7 +101,6 @@ function validateImage(image) {
 }
 
 function previewAnduploadImage(image) {
-	// container
 	var imgView = document.createElement("div");
 	imgView.className = "image-view";
 	imagePreviewRegion.appendChild(imgView);
@@ -110,7 +108,6 @@ function previewAnduploadImage(image) {
 	// previewing image
 	var img = document.createElement("img");
 	imgView.appendChild(img);
-
 	// progress overlay
 	//var overlay = document.createElement("div");
 	//overlay.className = "overlay";
@@ -138,7 +135,7 @@ function previewAnduploadImage(image) {
 		cache: false, 
         type: 'POST',
         success: function(data){
-          sendImage(image.name)
+          //sendImage(image.name)
         }
     });
     
@@ -181,7 +178,7 @@ function restartConversationInitial() {
     
     if (typeof chatChart !== 'undefined') { chatChart.destroy(); }
 
-    $(".chatbot.chart-container").remove();
+    //$(".chatbot.chart-container").remove();
     if (typeof modalChart !== 'undefined') { modalChart.destroy(); }
     $(".chatbot.chats").html("");
     $(".chatbot.usrInput").val("");
@@ -239,6 +236,16 @@ $(".chatbot.usrInput").on("keyup keypress", function(e) {
             //if (typeof modalChart !== 'undefined') { modalChart.destroy(); }
 
             //$("#paginated_cards").remove();
+            if (text.match(/image uploaded[|]/g)){
+                image_text = text.replace(/image uploaded[|]/g,'');
+                //alert(text)
+                var a = image_text.split(",\n")
+                for (i = 0; i < a.length-1; i++) {
+                   //alert(a[i])
+                   sendImage(a[i])
+                }
+                
+            }
             $(".chatbot.suggestions").remove();
             $(".chatbot.quickReplies").remove();
             $(".chatbot.usrInput").blur();
@@ -253,7 +260,7 @@ $(".chatbot.usrInput").on("keyup keypress", function(e) {
 $("#sendButton").on("click", function(e) {
     var text = $(".chatbot.usrInput").val();
     if (text == "" || $.trim(text) == "") {
-        alert("testx")
+        //alert("testx")
         e.preventDefault();
         return false;
     } else {
@@ -281,7 +288,7 @@ function setUserResponse(message) {
     if (message.match(/image uploaded[|]/g)){
         
         UserResponse = '<img class="chatbot userAvatar" src=' + "./static/img/userAvatar.jpg" + '><p class="chatbot userMsg">' + message + ' </p><div class="clearfix"></div>';
-        alert(message)
+        //alert(message)
     }
     else{
         UserResponse = '<img class="chatbot userAvatar" src=' + "./static/img/userAvatar.jpg" + '><p class="chatbot userMsg">' + message + ' </p><div class="clearfix"></div>';        
@@ -445,11 +452,14 @@ function setBotResponse(response) {
                         for (var i = 0; i < chartDataList.length; i++) {
                             chartData = chartDataList[i]
                             canvas_id = chartData.canvas_id
-                            title = chartData.title;
                             labels = chartData.labels;
-                            backgroundColor = chartData.backgroundColor;
-                            chartsData = chartData.chartsData;
                             chartType = chartData.chartType;
+                            backgroundColor = chartData.backgroundColor;
+                            
+                            title = chartData.title;
+                            chartsData = chartData.chartsData;
+
+                            
                             displayLegend = chartData.displayLegend;
                             createChart(title, labels, backgroundColor, chartsData, chartType, displayLegend,canvas_id)
 
@@ -841,26 +851,45 @@ function createCollapsible(data) {
 
 //function to create the charts & render it to the canvas
 function createChart(title, labels, backgroundColor, chartsData, chartType, displayLegend,canvas_id) {
-
     //create the ".chart-container" div that will render the charts in canvas as required by charts.js,
     // for more info. refer: https://www.chartjs.org/docs/latest/getting-started/usage.html
-    var html = '<div class="chatbot chart-container "'+canvas_id+'> <span class="chatbot modal-trigger expand" id="expand" title="expand" data-toggle="modal" data-target="#exampleModal"><i class="chatbot fa fa-external-link" aria-hidden="true"></i></span> <canvas id="'+canvas_id+'" ></canvas> </div> <div class="chatbot clearfix"></div>'
+    title_x= title
+    labels_x= labels
+    backgroundColor_x=backgroundColor
+    chartsData_x=chartsData
+    chartType_x=chartType
+    displayLegend_x=displayLegend
+    canvas_id_x=canvas_id
+    
+    var html = '<div class="chatbot chart-container "'+canvas_id+'> <span class="chatbot modal-trigger expand" id="expand" title="expand" data-toggle="modal" data-target="#exampleModal" onclick="'+createChartinModal(title_x, labels_x, backgroundColor_x, chartsData_x, chartType_x, displayLegend_x)+'"><i class="chatbot fa fa-external-link" aria-hidden="true"></i></span> <canvas id="'+canvas_id+'" ></canvas> </div> <div class="chatbot clearfix"></div>'
     $(html).appendTo('.chatbot.chats');
-
     //create the context that will draw the charts over the canvas in the ".chart-container" div
     var ctx = $('#'+canvas_id);
-
     // Once you have the element or context, instantiate the chart-type by passing the configuration,
     //for more info. refer: https://www.chartjs.org/docs/latest/configuration/
-    var data = {
-        labels: labels,
-        datasets: [{
-            label: title,
-            backgroundColor: backgroundColor,
-            data: chartsData,
-            fill: false
-        }]
-    };
+    if(chartType == "bar"){
+        var data = {
+            labels: labels,
+            datasets: [{
+                label: title,
+                backgroundColor: backgroundColor,
+                data: chartsData,
+                fill: false
+            }]
+        };
+    }
+    else if (chartType == "pie"){
+        var data = {
+            labels: labels,
+            datasets: [{
+                label: title,
+                backgroundColor: backgroundColor,
+                data: chartsData,
+                fill: false
+            }]
+        };
+            
+    }
     var options = {
         title: {
             display: true,
@@ -883,24 +912,23 @@ function createChart(title, labels, backgroundColor, chartsData, chartType, disp
             }
         }
     }
-
+    
+    
     //draw the chart by passing the configuration
     chatChart = new Chart(ctx, {
         type: chartType,
         data: data,
         options: options
     });
-
-
     scrollToBottomOfResults();
 }
 
 // on click of expand button, get the chart data from gloabl variable & render it to modal
-$(document).on("click", ".chatbot.expand", function() {
+//$(document).on("click", ".chatbot.expand", function() {
 
     //the parameters are declared gloabally while we get the charts data from rasa.
-    createChartinModal(title, labels, backgroundColor, chartsData, chartType, displayLegend)
-});
+
+//});
 
 $(document).on("click", ".chatbot.imageexpand", function() {
 
@@ -917,7 +945,10 @@ function createImageinModal(imagesrc){
 function createChartinModal(title, labels, backgroundColor, chartsData, chartType, displayLegend) {
     //if you want to display the charts in modal, make sure you have configured the modal in index.html
     //create the context that will draw the charts over the canvas in the "#modal-chart" div of the modal
+    $(".chatbot.modal-chart").val("")
     var ctx = $('.chatbot.modal-chart');
+   // ctx.clear(true);
+
     //alert(title)
     //alert(labels)
 
@@ -958,5 +989,5 @@ function createChartinModal(title, labels, backgroundColor, chartsData, chartTyp
         data: data,
         options: options
     });
-
+    
 }

@@ -725,7 +725,7 @@ video:focus {
     border-radius: 10px 0px 0px 10px;
     height: 100%;
     font-size: 25px;
-    padding: 7% !important;
+    padding: 5% !important;
     background-color: #00A096;
     color: white;
 }
