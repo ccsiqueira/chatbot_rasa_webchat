@@ -14,8 +14,8 @@ $(document).ready(function() {
     
     //user_id = "william.limas@wingscorp.com"
     //url_link="https://apichat.wingscorp.com"
-    //url_link="https://apifrdev.wingscorp.com:5005"
-    url_link="http://localhost"
+    url_link="https://apifrdev.wingscorp.com"
+    //url_link="http://localhost"
     //if you want the bot to start the conversation
     //action_trigger();
     //restartConversationInitial()
